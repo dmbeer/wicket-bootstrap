@@ -124,6 +124,15 @@ public class BootstrapFileInputField extends FileUploadField {
                 target.add(getForm());
                 BootstrapFileInputField.this.onSubmit(target);
             }
+            @Override
+            protected void onAfterSubmit(AjaxRequestTarget target) {
+            	super.onAfterSubmit(target);
+            	BootstrapFileInputField.this.onAfterSubmit(target);
+            }
+            @Override
+            protected void onError(AjaxRequestTarget target) {
+            	BootstrapFileInputField.this.onError(target);
+            }
         };
     }
 
@@ -144,10 +153,22 @@ public class BootstrapFileInputField extends FileUploadField {
      */
     protected void onSubmit(AjaxRequestTarget target) {
     }
+    
+    /**
+	 * A callback method that is called after successful file upload triggered
+	 * by the usage of the <em>Upload</em> button.
+	 * 
+	 * @param target the {@link AjaxRequestTarget}
+	 */
+    protected void onAfterSubmit(AjaxRequestTarget target) {
+    }
 
     @Override
     public void renderHead(final IHeaderResponse response) {
         FileinputJsReference.INSTANCE.renderHead(response);
+        
+        if(config.language() != null)
+        	new FileinputLocaleJsReference(config.language()).renderHead(response);
 
         JQuery fileinputJS = $(this).chain("fileinput", config);
 
